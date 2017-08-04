@@ -23,8 +23,13 @@ namespace FBGraphApi
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        string phrase;
+        int count;
+        List<Comment> comments = new List<Comment>();
         public MainWindow()
         {
+            
             InitializeComponent();
 
             FacebookClient client = new FacebookClient();
@@ -35,11 +40,14 @@ namespace FBGraphApi
                 grant_type = "client_credentials"
             });
             client.AccessToken = result.access_token;
-
-
-            //retrieving comments for the post
+                
             var response = (JsonObject)client.Get("1396920153731998/comments");
-            List<Comment> comments = new List<Comment>();
+
+            GetComments(response);
+           
+        }
+        internal List<Comment> GetComments(JsonObject response)
+        {
             foreach (var comm in (JsonArray)response["data"])
                 comments.Add(new Comment
                 {
@@ -47,26 +55,29 @@ namespace FBGraphApi
                     id = (string)(((JsonObject)comm)["id"]),
                     message = (string)(((JsonObject)comm)["message"])
                 });
+            return comments;
 
-            //extracting meesages from comments
-            List<string> messages = new List<string>();
-            foreach (var item in comments)
-            {
-                string json = JsonConvert.SerializeObject(item);
-                Comment deserializedComment = JsonConvert.DeserializeObject<Comment>(json);
-                messages.Add(deserializedComment.message);
-            }
-            
-            
-
-            List<string> match = new List<string>();
-            foreach (string mess in messages)
-            {
-                if (mess.Contains("M"))
-                {
-                    match.Add(mess);
-                }
-            }
         }
+       
+        private void btnSzukaj_Click(object sender, RoutedEventArgs e)
+        {
+            CountMatches(comments);
+            lblWystapieniaLicz.Content = count;
+        }
+
+        private void txtFraza_TextChanged(object sender, TextChangedEventArgs e)
+        {
+                phrase = txtFraza.Text;
+        }
+
+        private int CountMatches(List<Comment> comments)
+        {
+                var matches = from comm in comments
+                                  where comm.message.ToLower().Contains(phrase)
+                                  select comm;
+            count = matches.Count() ;
+            return count;
+        }
+            
     }
 }

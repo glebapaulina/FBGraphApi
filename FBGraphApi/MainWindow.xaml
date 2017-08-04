@@ -7,7 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Label x:Name="lblFraza" Content="Szukana fraza:" HorizontalAlignment="Left" Height="24" Margin="31,54,0,0" VerticalAlignment="Top" Width="86"/>
+        <TextBox x:Name="txtFraza" HorizontalAlignment="Left" Height="24" Margin="122,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202" TextChanged="txtFraza_TextChanged"/>
+        <Label x:Name="lblWystapienia" Content="Wystąpienia:" HorizontalAlignment="Left" Height="26" Margin="31,83,0,0" VerticalAlignment="Top" Width="91"/>
+        <Button x:Name="btnSzukaj" Content="Szukaj" HorizontalAlignment="Left" Height="36" Margin="214,137,0,0" VerticalAlignment="Top" Width="110" Click="btnSzukaj_Click"/>
+        <Label x:Name="lblWystapieniaLicz" HorizontalAlignment="Left" Height="26" Margin="122,83,0,0" VerticalAlignment="Top" Width="62" IsEnabled="False"/>
+
+
 
     </Grid>
 </Window>
